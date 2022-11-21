@@ -34,8 +34,8 @@ for collectionDetails in collectionDict:
         gradings = ""
         for grades in hadith["grades"]:
             gradings = gradings + grades["name"] + ":" + grades["grade"] + " && "
-            if(gradings.endswith(" && ")):
-                gradings = gradings[:-4]
+        if(gradings.endswith(" && ")):
+            gradings = gradings[:-4]
         cursor.execute(
             f"""INSERT INTO hadith
             (hadithnumber,text,grades,bookNumber,bookhadith,bookname,language,shortname)

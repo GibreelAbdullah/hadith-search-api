@@ -13,7 +13,7 @@ conn = sqlite3.connect('hadith_search_full.db', check_same_thread=False)
 def getQuery(query, lang):
     langFilter = ''
     print(lang)
-    if (lang != ''):
+    if (lang is not None):
         langFilter = f'AND "language" MATCH "{lang.replace(","," OR ")}"'
     base_query = f"""select
         highlight(hadith,
@@ -40,7 +40,8 @@ def getQuery(query, lang):
         5 ,
         '<span style="color:red;">',
         '</span>') bookname ,
-        language
+        language,
+        shortname
     from
         hadith
     WHERE hadith
