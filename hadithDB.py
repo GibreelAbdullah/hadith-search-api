@@ -33,7 +33,7 @@ for collectionDetails in collectionDict:
     for hadith in data["hadiths"]:
         gradings = ""
         for grades in hadith["grades"]:
-            gradings = gradings + grades["name"] + ":" + grades["grade"] + " && "
+            gradings = gradings + grades["name"] + "::" + grades["grade"] + " && "
         if(gradings.endswith(" && ")):
             gradings = gradings[:-4]
         cursor.execute(

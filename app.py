@@ -46,6 +46,8 @@ def getQuery(query, lang):
         hadith
     WHERE hadith
     MATCH  "{query}"
+    and text != ""
+    and text != "empty"
     {langFilter}
     order by
         rank
