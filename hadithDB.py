@@ -13,9 +13,9 @@ for collectionList, collectionListDetails in editionsData.items():
 conn = sqlite3.connect("hadith_search_full.db")
 cursor = conn.cursor()
 cursor.execute("DROP TABLE IF EXISTS hadith;")
-cursor.execute("CREATE VIRTUAL TABLE IF NOT EXISTS hadith USING FTS5(hadithnumber,text,grades,bookNumber,bookhadith,bookname,language,shortname);")
+cursor.execute("CREATE VIRTUAL TABLE IF NOT EXISTS hadith USING FTS5(hadithnumber,arabicnumber,text,grades,bookNumber,bookhadith,bookname,language,shortname);")
 
-collectionsFile = open("../hadith-api/01-Collections/collections.json")
+collectionsFile = open("../hadith-api/updates/collections/collections.min.json")
 collectionsData = json.load(collectionsFile)
 collectionShortNameDict = {}
 for collectionFileNameObject in collectionsData["collections"]:
@@ -25,12 +25,16 @@ for collectionDetails in collectionDict:
     print(collectionDetails["name"])
     inputFile = open(
         "../hadith-api/editions/" + collectionDetails["name"] + ".json",
+        # "../hadith-api/editions/ara-muslim.json",
         "r",
         encoding="utf-8",
     )
     data = json.load(inputFile)
 
     for hadith in data["hadiths"]:
+        value = None
+        if 'arabicnumber' in hadith.keys():
+            value = hadith["arabicnumber"]
         gradings = ""
         for grades in hadith["grades"]:
             gradings = gradings + grades["name"] + "::" + grades["grade"] + " && "
@@ -38,11 +42,12 @@ for collectionDetails in collectionDict:
             gradings = gradings[:-4]
         cursor.execute(
             f"""INSERT INTO hadith
-            (hadithnumber,text,grades,bookNumber,bookhadith,bookname,language,shortname)
-            VALUES(?,?,?,?,?,?,?,?);""",
+            (hadithnumber,arabicnumber,text,grades,bookNumber,bookhadith,bookname,language,shortname)
+            VALUES(?,?,?,?,?,?,?,?,?);""",
             (
-                hadith["hadithnumber"],hadith["text"],gradings,hadith["reference"]["book"],hadith["reference"]["hadith"],data["metadata"]["name"],collectionDetails["language"],collectionShortNameDict[data["metadata"]["name"]]
+                hadith["hadithnumber"],value,hadith["text"],gradings,hadith["reference"]["book"],hadith["reference"]["hadith"],data["metadata"]["name"],collectionDetails["language"],collectionShortNameDict[data["metadata"]["name"]]
             ),
         )
+    print("complete")
 conn.commit()
 conn.close()
