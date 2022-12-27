@@ -1,4 +1,5 @@
 import sqlite3
+import re
 from flask_cors import CORS
 
 from flask import Flask, request
@@ -62,14 +63,20 @@ def searchHadith():
     if (queryParam is None or queryParam == ''):
         return 'Invalid search word'
     elif(conn):
+        queryParam = re.sub(r'[^\u001A ^\u005F ^\u0030-\u0039 ^\u0041-\u005A ^\u0061-\u007A]', ' ',queryParam)
         query = getQuery(queryParam, request.args.get("lang"))
+        print(query)
         cursor = conn.execute(query)
         data = cursor.fetchall()
         return data
 
 @app.route('/random', methods=['GET'])
 def randomHadith():
-    cursor = conn.execute(randomQuery)
+    length = 99999
+    queryParam = request.args.get("l")
+    if (not(queryParam is None or queryParam == '')):
+        length = int(queryParam)
+    cursor = conn.execute(randomQuery(length))
     data = cursor.fetchall()
     return data
 
