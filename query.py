@@ -1,7 +1,7 @@
 def randomQuery(length):
     return '''
 select
-        h2.text araHadith,
+        REPLACE(h2.text,'‏','') araHadith,
         h1.text engHadith,
         h1.bookname || ' ' || h1.arabicnumber reference,
         'hadithhub.com/' || h1.shortname || ':' || h1.hadithnumber link,
