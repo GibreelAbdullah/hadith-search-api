@@ -63,7 +63,7 @@ def searchHadith():
     if (queryParam is None or queryParam == ''):
         return 'Invalid search word'
     elif(conn):
-        queryParam = re.sub(r'[^\u001A ^\u005F ^\u0030-\u0039 ^\u0041-\u005A ^\u0061-\u007A]', ' ',queryParam)
+        queryParam = re.sub(r'[\u0000-\u002F \u003A-\u0040 \u005B-\u0060 \u007B-\u007F]', ' ',queryParam)
         query = getQuery(queryParam, request.args.get("lang"))
         print(query)
         cursor = conn.execute(query)
