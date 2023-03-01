@@ -13,7 +13,7 @@ for collectionList, collectionListDetails in editionsData.items():
 conn = sqlite3.connect("hadith_search_full.db")
 cursor = conn.cursor()
 cursor.execute("DROP TABLE IF EXISTS hadith;")
-cursor.execute("CREATE VIRTUAL TABLE IF NOT EXISTS hadith USING FTS5(hadithnumber,arabicnumber,text,grades,bookNumber,bookhadith,bookname,language,shortname);")
+cursor.execute("CREATE VIRTUAL TABLE IF NOT EXISTS hadith USING FTS5(hadithnumber,arabicnumber,text,grades,bookNumber,bookhadith,bookname,language,shortname, tokenize = 'porter unicode61 remove_diacritics 1');")
 
 collectionsFile = open("../hadith-api/updates/collections/collections.min.json")
 collectionsData = json.load(collectionsFile)
