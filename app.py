@@ -10,62 +10,15 @@ CORS(app)
 
 conn = sqlite3.connect('hadith_search_full.db', check_same_thread=False)
 
-def getQuery(query, lang):
-    langFilter = ''
-    if (lang is not None):
-        langFilter = f'AND "language" MATCH "{lang.replace(","," OR ")}"'
-    base_query = f"""select
-        highlight(hadith,
-        0 ,
-        '<span style="color:red;">',
-        '</span>') hadithnumber ,
-        highlight(hadith,
-        1 ,
-        '<span style="color:red;">',
-        '</span>') arabicnumber ,
-        highlight(hadith,
-        2 ,
-        '<span style="color:red;">',
-        '</span>') "text" ,
-        highlight(hadith,
-        3 ,
-        '<span style="color:red;">',
-        '</span>') grades ,
-        highlight(hadith,
-        4 ,
-        '<span style="color:red;">',
-        '</span>') bookNumber ,
-        highlight(hadith,
-        5 ,
-        '<span style="color:red;">',
-        '</span>') bookhadith ,
-        highlight(hadith,
-        6 ,
-        '<span style="color:red;">',
-        '</span>') bookname ,
-        language,
-        shortname
-    from
-        hadith
-    WHERE hadith
-    MATCH  "{query}"
-    and text != ""
-    and text != "empty"
-    {langFilter}
-    order by
-        rank
-    LIMIT 500"""
-    return base_query
-
 @app.route('/search', methods=['GET'])
 def searchHadith():
-    queryParam = request.args.get("q")
+    queryParam = request.args.get("query")
     if (queryParam is None or queryParam == ''):
         return 'Invalid search word'
     elif(conn):
         queryParam = re.sub(r'[\u0000-\u002F \u003A-\u0040 \u005B-\u0060 \u007B-\u007F]', ' ',queryParam)
-        query = getQuery(queryParam, request.args.get("lang"))
-        print(query)
+        query = searchQuery(queryParam, request.args.get("language_code"), request.args.get("collection"))
+        # print(query)
         cursor = conn.execute(query)
         data = cursor.fetchall()
         return data

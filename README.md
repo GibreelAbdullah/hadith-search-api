@@ -15,11 +15,42 @@ app.py - Open up a port which provides the search functionality.
 ## Docker Build Commands
 
 Go to the root of the project
-
+```bash
 docker build -t gibreelabdullah/hadith-search-api:latest . &&
 
 docker push gibreelabdullah/hadith-search-api:latest
+```
+put gibreelabdullah/hadith-search-api:latest in koyeb
 
 ----------------------------------------------------
 
-put gibreelabdullah/hadith-search-api:latest in koyeb
+To test locally run
+
+```bash
+docker run --publish 5000:5000 gibreelabdullah/hadith-search-api:latest
+```
+----------------------------------------------------
+
+https://hadith-search-api-gibreelabdullah.koyeb.app/search?q=Allah
+
+# NOTES
+
+## FTS5 default (bm25)
+- Used FTS5 search based on bm25 inverted index.
+- Not giving accurate results for larger hadith which contain all the serach words. Known issue of bm25.
+- In case of a search string with multiple words, each word has the same weight. So for a search term "A B", both "A" and "B" occur once in document X, and "A" occurs 5 times in documnt Y. Document Y will be ranked first. While common sense says that a complete match should be first.
+- To mitigate this issue, I search for the complete string "A B" in the database and then append the results obtained by "A OR B", but it considerably slows down the speed.
+
+## Meilisearch
+- Memory consumption was too high. (8 GB)
+
+## Apache Solr
+- Still in consideration. Will check back on this.
+
+## AI Search (KNN using FAISS)
+
+- MBert (bert-base-multilingual-uncased)
+    - The accuracy was extremely low
+
+- MPnet (paraphrase-multilingual-mpnet-base-v2)
+    - Accuracy is good, but really slow. For NVV (Non Vocabulary Words) it is not performing well.

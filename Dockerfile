@@ -1,5 +1,5 @@
 # start by pulling the python image
-FROM python:3.8-alpine
+FROM python:bullseye
 
 # copy the requirements file into the image
 COPY ./requirements.txt /app/requirements.txt
@@ -11,7 +11,11 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 
 # copy every content from the local file to the image
-COPY . /app
+COPY ./app.py /app/app.py
+COPY ./query.py /app/query.py
+# COPY ./fts5stemmer.so /app/fts5stemmer.so
+COPY ./hadith_search_full.db /app/hadith_search_full.db
+# COPY ./app.py /app/app.py
 
 # configure the container to run in an executed manner
 ENTRYPOINT [ "python3" ]
