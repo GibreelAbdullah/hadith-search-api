@@ -18,8 +18,9 @@ cursor.execute("CREATE VIRTUAL TABLE IF NOT EXISTS hadith USING FTS5(hadithnumbe
 collectionsFile = open("../hadith-api/updates/collections/collections.min.json")
 collectionsData = json.load(collectionsFile)
 collectionShortNameDict = {}
-for collectionFileNameObject in collectionsData["collections"]:
-    collectionShortNameDict[collectionFileNameObject["eng-name"]] = collectionFileNameObject["name"]
+for collectionCategories in collectionsData["collections"]:
+    for collectionFileNameObject in collectionCategories["books"]:
+        collectionShortNameDict[collectionFileNameObject["eng-name"]] = collectionFileNameObject["name"]
     
 for collectionDetails in collectionDict:
     print(collectionDetails["name"])
