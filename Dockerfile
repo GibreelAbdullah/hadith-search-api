@@ -1,23 +1,15 @@
-# start by pulling the python image
-FROM python:bullseye
+FROM public.ecr.aws/lambda/python:3.12
 
-# copy the requirements file into the image
-COPY ./requirements.txt /app/requirements.txt
+# Copy requirements.txt
+COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
-# switch working directory
-WORKDIR /app
-
-# install the dependencies and packages in the requirements file
+# Install the specified packages
 RUN pip install -r requirements.txt
 
-# copy every content from the local file to the image
-COPY ./app.py /app/app.py
-COPY ./query.py /app/query.py
-# COPY ./fts5stemmer.so /app/fts5stemmer.so
-COPY ./hadith_search_full.db /app/hadith_search_full.db
-# COPY ./app.py /app/app.py
+# Copy function code
+COPY app.py ${LAMBDA_TASK_ROOT}
+COPY query.py ${LAMBDA_TASK_ROOT}
+COPY hadith_search_full.db ${LAMBDA_TASK_ROOT}
 
-# configure the container to run in an executed manner
-ENTRYPOINT [ "python3" ]
-
-CMD ["app.py" ]
+# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+CMD [ "app.lambda_handler" ]
