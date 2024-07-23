@@ -1,4 +1,6 @@
-# This service provides the Search functionality in hadithhub.com
+# OLD ARCHIVED VERSION. USE [Hadith Search API 2.0](https://github.com/GibreelAbdullah/hadith-search-api-2.0)
+
+## This service provides the Search functionality in hadithhub.com
 
 ## Reason for a separate service
 
