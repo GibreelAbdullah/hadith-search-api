@@ -1,4 +1,4 @@
-# OLD ARCHIVED VERSION. USE [Hadith Search API 2.0](https://github.com/GibreelAbdullah/hadith-search-api-2.0)
+# OLD ARCHIVED VERSION. USE [Hadith API Updater](https://github.com/GibreelAbdullah/hadith-api-updater)
 
 ## This service provides the Search functionality in hadithhub.com
 
